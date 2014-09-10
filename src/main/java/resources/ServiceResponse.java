@@ -1,21 +1,23 @@
 package resources;
 
+import java.util.List;
+
 public class ServiceResponse {
 
-    private final String status;
+    private final List<String> historyItems;
     private final String message;
 
     public ServiceResponse(ServiceResponseBuilder builder) {
-        this.status = builder.status;
+        this.historyItems = builder.historyItems;
         this.message = builder.message;
     }
 
     public static class ServiceResponseBuilder {
-        private String status;
+        private List<String> historyItems;
         private String message;
 
-        public ServiceResponseBuilder withStatus(String status) {
-            this.status = status;
+        public ServiceResponseBuilder withHistoryItems(List<String> historyItems) {
+            this.historyItems = historyItems;
             return this;
         }
 

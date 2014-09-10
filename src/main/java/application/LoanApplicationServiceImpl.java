@@ -1,12 +1,24 @@
 package application;
 
+import org.springframework.stereotype.Service;
+import repository.LoanEntity;
+import repository.LoanRepository;
 import resources.LoanApplicationService;
 import resources.ServiceRequest;
 import resources.ServiceResponse;
 
+import javax.inject.Inject;
+
+@Service
 public class LoanApplicationServiceImpl implements LoanApplicationService {
 
-    ValidationService validationService = new ValidationService();
+    private ValidationService validationService = new ValidationService();
+    private final LoanRepository repository;
+
+    @Inject
+    public LoanApplicationServiceImpl(final LoanRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public ServiceResponse apply(ServiceRequest request) {
@@ -27,7 +39,6 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     @Override
     public ServiceResponse getHistory() {
         return new ServiceResponse.ServiceResponseBuilder()
-                .withStatus("OK")
                 .withMessage("Performed getHistory")
                 .build();
     }
