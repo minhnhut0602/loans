@@ -16,7 +16,7 @@ public class LoanApplicationResource {
     }
 
     @RequestMapping("/extend")
-    public ServiceResponse extend(@RequestParam(value = "term", required = false, defaultValue = "World") String term) {
+    public ServiceResponse extend(@RequestParam(value = "term", required = false, defaultValue = "xxxxxxx") String term) {
         return loanApplicationService.extend(new ServiceRequest(term));
     }
 
