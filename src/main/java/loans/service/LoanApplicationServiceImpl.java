@@ -1,10 +1,10 @@
 package loans.service;
 
-import org.springframework.stereotype.Service;
-import loans.repository.LoanEntity;
-import loans.repository.LoanRepository;
 import loans.domain.ServiceRequest;
 import loans.domain.ServiceResponse;
+import loans.repository.LoanEntity;
+import loans.repository.LoanRepository;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;

@@ -1,15 +1,12 @@
 package loans.controller;
 
-import loans.domain.ServiceRequest;
-import loans.service.LoanApplicationService;
 import loans.domain.ServiceResponse;
+import loans.service.LoanApplicationService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-
-import java.util.ArrayList;
 
 import static loans.domain.ServiceRequest.ServiceRequestBuilder;
 
@@ -20,7 +17,7 @@ public class LoansController {
 
     @Inject
     public LoansController(final LoanApplicationService loanApplicationService) {
-        this.loanApplicationService=loanApplicationService;
+        this.loanApplicationService = loanApplicationService;
     }
 
     @RequestMapping("/apply")
