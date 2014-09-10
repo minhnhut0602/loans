@@ -1,4 +1,4 @@
-package resources;
+package loans.domain;
 
 import java.util.List;
 
@@ -29,5 +29,13 @@ public class ServiceResponse {
         public ServiceResponse build() {
             return new ServiceResponse(this);
         }
+    }
+
+    public List<String> getHistoryItems() {
+        return historyItems;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

@@ -1,5 +1,9 @@
-package resources;
+package loans.resources;
 
+import loans.controller.LoansController;
+import loans.domain.ServiceRequest;
+import loans.domain.ServiceResponse;
+import loans.service.LoanApplicationService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +33,7 @@ public class LoansControllerTest {
         final ServiceResponse savedLoanServiceResponse = stubServiceToReturnStoredEntity();
         ServiceResponse serviceResponse = loansController.apply("FakeAmount", "FakeTerm");
 
-        verify(loanApplicationService,times(1)).apply(new ServiceRequest.ServiceRequestBuilder().withAmount("FakeAmount").withTerm("FakeTerm").build());
+        verify(loanApplicationService,times(1)).apply(any(ServiceRequest.class));
         assertEquals("Returned entity should come from the service", savedLoanServiceResponse, serviceResponse);
     }
     private ServiceResponse stubServiceToReturnStoredEntity() {

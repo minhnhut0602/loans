@@ -1,13 +1,17 @@
-package resources;
+package loans.controller;
 
-import application.LoanApplicationServiceImpl;
+import loans.domain.ServiceRequest;
+import loans.service.LoanApplicationService;
+import loans.domain.ServiceResponse;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 
-import static resources.ServiceRequest.ServiceRequestBuilder;
+import java.util.ArrayList;
+
+import static loans.domain.ServiceRequest.ServiceRequestBuilder;
 
 @RestController
 public class LoansController {
@@ -22,10 +26,11 @@ public class LoansController {
     @RequestMapping("/apply")
     public ServiceResponse apply(@RequestParam(value = "amount", required = true) String amount,
                                  @RequestParam(value = "term", required = true) String term) {
-        return loanApplicationService.apply(new ServiceRequestBuilder()
+        ServiceResponse serviceResponse = loanApplicationService.apply(new ServiceRequestBuilder()
                 .withAmount(amount)
                 .withTerm(term)
                 .build());
+        return serviceResponse;
     }
 
     @RequestMapping("/extend")

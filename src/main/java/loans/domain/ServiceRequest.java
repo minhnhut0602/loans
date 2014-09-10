@@ -1,4 +1,4 @@
-package resources;
+package loans.domain;
 
 public class ServiceRequest {
 
@@ -27,5 +27,13 @@ public class ServiceRequest {
         public ServiceRequest build() {
             return new ServiceRequest(this);
         }
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public String getTerm() {
+        return term;
     }
 }

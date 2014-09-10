@@ -1,4 +1,7 @@
-package resources;
+package loans.service;
+
+import loans.domain.ServiceRequest;
+import loans.domain.ServiceResponse;
 
 public interface LoanApplicationService {
 
