@@ -2,22 +2,30 @@ package resources;
 
 public class ServiceResponse {
 
-    String status;
-    String message;
+    private final String status;
+    private final String message;
 
-    public String getMessage() {
-        return message;
+    public ServiceResponse(ServiceResponseBuilder builder) {
+        this.status = builder.status;
+        this.message = builder.message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+    public static class ServiceResponseBuilder {
+        private String status;
+        private String message;
 
-    public String getStatus() {
-        return status;
-    }
+        public ServiceResponseBuilder withStatus(String status) {
+            this.status = status;
+            return this;
+        }
 
-    public void setStatus(String status) {
-        this.status = status;
+        public ServiceResponseBuilder withMessage(String message) {
+            this.message = message;
+            return this;
+        }
+
+        public ServiceResponse build() {
+            return new ServiceResponse(this);
+        }
     }
 }

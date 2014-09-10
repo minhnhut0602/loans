@@ -5,27 +5,30 @@ import resources.ServiceRequest;
 import resources.ServiceResponse;
 
 public class LoanApplicationServiceImpl implements LoanApplicationService {
+
+    ValidationService validationService = new ValidationService();
+
     @Override
     public ServiceResponse apply(ServiceRequest request) {
-        ServiceResponse response=new ServiceResponse();
-        response.setStatus("OK");
-        response.setMessage("Performed apply");
-        return response;
+        String message = validationService.validateApplyRequest(request);
+        return new ServiceResponse.ServiceResponseBuilder()
+                .withMessage(message)
+                .build();
     }
 
     @Override
     public ServiceResponse extend(ServiceRequest request) {
-        ServiceResponse response=new ServiceResponse();
-        response.setStatus("OK");
-        response.setMessage("Performed extend");
-        return response;
+        String message = validationService.validateExtendRequest();
+        return new ServiceResponse.ServiceResponseBuilder()
+                .withMessage(message)
+                .build();
     }
 
     @Override
     public ServiceResponse getHistory() {
-        ServiceResponse response=new ServiceResponse();
-        response.setStatus("OK");
-        response.setMessage("Performed getHistory");
-        return response;
+        return new ServiceResponse.ServiceResponseBuilder()
+                .withStatus("OK")
+                .withMessage("Performed getHistory")
+                .build();
     }
 }
