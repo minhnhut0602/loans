@@ -1,11 +1,26 @@
 package resources;
 
 public class ServiceRequest {
-    public ServiceRequest(String amount, String term) {
-        //TODO
+
+    private String amount;
+    private String term;
+
+    public ServiceRequest() {
     }
 
-    public ServiceRequest(String term) {
-        //TODO
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public String getTerm() {
+        return term;
+    }
+
+    public void setTerm(String term) {
+        this.term = term;
     }
 }
