@@ -2,26 +2,39 @@ package loans.service;
 
 import loans.domain.ServiceRequest;
 import loans.repository.LoanEntity;
+import loans.repository.LoanRepository;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static loans.service.ValidationStatus.INVALID_AMOUNT;
+import static loans.service.ValidationStatus.INVALID_TERM;
+import static loans.service.ValidationStatus.POSSIBLE_FRAUD;
+import static loans.service.ValidationStatus.POSSIBLE_SPAM;
+
 public class ValidationService {
 
     private static final Integer POSSIBLE_MAX_AMOUNT = 450;
+    private static final Integer POSSIBLE_MAX_TERM = 30;
+    public static final int MAX_APPLICATIONS_PER_DAY = 3;
 
-    public ValidationStatus validateApplyRequest(ServiceRequest request, List<LoanEntity> existingEntriesForThisIp) {
-        if (isPossibleSpam(existingEntriesForThisIp)) {
-            return ValidationStatus.POSSIBLE_SPAM;
+    public ValidationStatus validateApplyRequest(ServiceRequest request, LoanRepository repository) {
+        if(repository.findByStatus("ACCEPTED")!=null){
+            return ValidationStatus.ALREADY_IN_PROGRESS;
+        }
+        if (isPossibleSpam(repository.findByIpAddress(request.getIpAddress()))) {
+            return POSSIBLE_SPAM;
         }
         if (isPossibleFraud(request)) {
-           return ValidationStatus.POSSIBLE_FRAUD;
+            return POSSIBLE_FRAUD;
         }
-
-        Integer amount = request.getAmount();
-        Integer term = request.getTerm();
-
+        if (POSSIBLE_MAX_AMOUNT < request.getAmount() || request.getAmount() <= 0) {
+            return INVALID_AMOUNT;
+        }
+        if (POSSIBLE_MAX_TERM < request.getTerm() || request.getTerm() <= 0) {
+            return INVALID_TERM;
+        }
         return ValidationStatus.OK;
     }
 
@@ -49,17 +62,13 @@ public class ValidationService {
         cal.add(Calendar.DATE, -1);
         int occurencies = 0;
         for (LoanEntity loanEntity : existingEntriesForThisIp) {
-            if (occurencies >= 3) {
-                return true;
-            }
             if (loanEntity.getApplicationDate().after(cal.getTime())) {
                 occurencies++;
             }
+            if (occurencies >= MAX_APPLICATIONS_PER_DAY) {
+                return true;
+            }
         }
         return false;
-    }
-
-    public ValidationStatus validateExtendRequest() {
-        return null;  //TODO
     }
 }

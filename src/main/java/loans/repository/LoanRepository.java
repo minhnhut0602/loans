@@ -8,4 +8,5 @@ public interface LoanRepository extends CrudRepository<LoanEntity, String> {
 
     List<LoanEntity> findByIpAddress(String ipAddress);
 
+    LoanEntity findByStatus(String status);
 }

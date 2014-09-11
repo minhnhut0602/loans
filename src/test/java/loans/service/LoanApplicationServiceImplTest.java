@@ -33,7 +33,7 @@ public class LoanApplicationServiceImplTest {
     @Test
     public void shouldSaveNewEntry() {
         final ServiceResponse responseStub = stubResponseOnSave();
-        final ServiceRequest request = new ServiceRequest.ServiceRequestBuilder().withAmount(100).withTerm(30).build();
+        final ServiceRequest request = new ServiceRequest.ServiceRequestBuilder().withAmount(100.0).withTerm(30).build();
         final ServiceResponse response = loanApplicationService.apply(request);
         verify(loanRepository, times(1)).save(any(LoanEntity.class));
 
@@ -42,7 +42,7 @@ public class LoanApplicationServiceImplTest {
 
     private ServiceResponse stubResponseOnSave() {
         ServiceResponse response = new ServiceResponse.ServiceResponseBuilder().build();
-        when(loanRepository.save(any(LoanEntity.class))).thenReturn(new LoanEntity.LoanEntityBuilder().withAmount(100).withTerm(30).build());
+        when(loanRepository.save(any(LoanEntity.class))).thenReturn(new LoanEntity.LoanEntityBuilder().withAmount(100.0).withTerm(30).build());
         return response;
     }
 }

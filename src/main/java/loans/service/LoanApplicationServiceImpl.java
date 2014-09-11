@@ -24,18 +24,28 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
 
     @Override
     public ServiceResponse apply(ServiceRequest request) {
-        ValidationStatus status = validationService.validateApplyRequest(request, repository.findByIpAddress(request.getIpAddress()));
-        String responseMessage = "NOT OKAY";
+        ValidationStatus status = validationService.validateApplyRequest(request, repository);
+        String resultMessage;
         if (status.equals(ValidationStatus.OK)) {
             LoanEntity loanEntity = new LoanEntityBuilder()
                     .withAmount(request.getAmount())
+                    .withStatus("ACCEPTED")
                     .withTerm(request.getTerm())
                     .withIpAddress(request.getIpAddress())
                     .build();
-            responseMessage = save(loanEntity);
+            resultMessage = save(loanEntity);
+        } else {
+            LoanEntity loanEntity = new LoanEntityBuilder()
+                    .withAmount(request.getAmount())
+                    .withStatus("DECLINED")
+                    .withTerm(request.getTerm())
+                    .withIpAddress(request.getIpAddress())
+                    .build();
+            save(loanEntity);
+            resultMessage = status.getValue();
         }
         return new ServiceResponse.ServiceResponseBuilder()
-                .withMessage(responseMessage)
+                .withMessage(resultMessage)
                 .build();
     }
 
@@ -51,14 +61,32 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
 
     @Override
     public ServiceResponse extend(ServiceRequest request) {
-        ValidationStatus status = validationService.validateExtendRequest();
+        LoanEntity loanEntity = repository.findByStatus("ACCEPTED");
+        String resultMessage;
+        if (loanEntity.isExtended()) {
+            resultMessage = "ALREADY EXTENDED";
+        } else {
+            loanEntity.setExtended(true);
+            save(loanEntity);
+
+            LoanEntity extension = new LoanEntityBuilder()
+                    .withAmount(Double.valueOf(loanEntity.getAmount()) * 1.5)
+                    .withTerm(Integer.valueOf(loanEntity.getTerm() + 7))
+                    .withStatus("EXTENSION")
+                    .withIpAddress(request.getIpAddress())
+                    .build();
+            resultMessage = save(extension);
+        }
         return new ServiceResponse.ServiceResponseBuilder()
+                .withMessage(resultMessage)
                 .build();
     }
 
     @Override
     public ServiceResponse getHistory() {
+        Iterable<LoanEntity> loanEntities = repository.findAll();
         return new ServiceResponse.ServiceResponseBuilder()
+                .withHistoryItems(loanEntities)
                 .withMessage("Performed getHistory")
                 .build();
     }

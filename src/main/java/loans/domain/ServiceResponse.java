@@ -1,10 +1,12 @@
 package loans.domain;
 
+import loans.repository.LoanEntity;
+
 import java.util.List;
 
 public class ServiceResponse {
 
-    private final List<String> historyItems;
+    private final Iterable<LoanEntity> historyItems;
     private final String message;
 
     public ServiceResponse(ServiceResponseBuilder builder) {
@@ -13,10 +15,10 @@ public class ServiceResponse {
     }
 
     public static class ServiceResponseBuilder {
-        private List<String> historyItems;
+        private Iterable<LoanEntity> historyItems;
         private String message;
 
-        public ServiceResponseBuilder withHistoryItems(List<String> historyItems) {
+        public ServiceResponseBuilder withHistoryItems(Iterable<LoanEntity> historyItems) {
             this.historyItems = historyItems;
             return this;
         }
@@ -31,7 +33,7 @@ public class ServiceResponse {
         }
     }
 
-    public List<String> getHistoryItems() {
+    public Iterable<LoanEntity> getHistoryItems() {
         return historyItems;
     }
 

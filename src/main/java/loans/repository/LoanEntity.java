@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -20,12 +19,10 @@ public class LoanEntity {
 
     @Column(name = "amount", nullable = false, updatable = false)
     @NotNull
-    @Size(max = 64)
     private String amount;
 
     @Column(name = "term", nullable = false, updatable = true)
     @NotNull
-    @Size(max = 64)
     private String term;
 
     @Column(name = "ipAddress", nullable = false, updatable = false)
@@ -36,6 +33,13 @@ public class LoanEntity {
     @NotNull
     private Date applicationDate;
 
+    @Column(name = "status", nullable = false, updatable = true)
+    @NotNull
+    private String status;
+
+    @Column(name = "extended")
+    private  boolean extended;
+
     public LoanEntity() {
     }
 
@@ -43,14 +47,19 @@ public class LoanEntity {
         this.amount = builder.amount.toString();
         this.term = builder.term.toString();
         this.ipAddress = builder.ipAddress;
+        this.status = builder.status;
+        this.extended=builder.extended;
+
     }
 
     public static class LoanEntityBuilder {
-        private Integer amount;
+        private Double amount;
         private Integer term;
         private String ipAddress;
+        private String status;
+        private  boolean extended;
 
-        public LoanEntityBuilder withAmount(Integer amount) {
+        public LoanEntityBuilder withAmount(Double amount) {
             this.amount = amount;
             return this;
         }
@@ -64,6 +73,16 @@ public class LoanEntity {
             this.ipAddress = ipAddress;
             return this;
         }
+
+        public LoanEntityBuilder withStatus(String status) {
+            this.status = status;
+            return this;
+        }
+        public LoanEntityBuilder withExtended(boolean extended) {
+            this.extended = extended;
+            return this;
+        }
+
 
         public LoanEntity build() {
             return new LoanEntity(this);
@@ -85,5 +104,33 @@ public class LoanEntity {
 
     public Date getApplicationDate() {
         return applicationDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public void setTerm(String term) {
+        this.term = term;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setExtended(boolean extended) {
+        this.extended = extended;
+    }
+
+    public boolean isExtended() {
+        return extended;
     }
 }

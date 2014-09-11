@@ -35,7 +35,7 @@ public class LoansControllerTest {
     public void shouldApplyLoan() throws Exception {
         final ServiceResponse savedLoanServiceResponse = stubServiceToReturnStoredEntity();
         HttpServletRequest httpServletRequest = new MockHttpServletRequest();
-        ServiceResponse serviceResponse = loansController.apply(httpServletRequest,100, 30);
+        ServiceResponse serviceResponse = loansController.apply(httpServletRequest,100.0, 30);
 
         verify(loanApplicationService, times(1)).apply(any(ServiceRequest.class));
         assertEquals("Returned entity should come from the service", savedLoanServiceResponse, serviceResponse);

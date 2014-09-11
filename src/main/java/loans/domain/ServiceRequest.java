@@ -2,7 +2,7 @@ package loans.domain;
 
 public class ServiceRequest {
 
-    private final Integer amount;
+    private final Double amount;
     private final Integer term;
     private final String ipAddress;
 
@@ -13,11 +13,11 @@ public class ServiceRequest {
     }
 
     public static class ServiceRequestBuilder {
-        private Integer amount;
+        private Double amount;
         private Integer term;
         private String ipAddress;
 
-        public ServiceRequestBuilder withAmount(Integer amount) {
+        public ServiceRequestBuilder withAmount(Double amount) {
             this.amount = amount;
             return this;
         }
@@ -37,7 +37,7 @@ public class ServiceRequest {
         }
     }
 
-    public Integer getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
