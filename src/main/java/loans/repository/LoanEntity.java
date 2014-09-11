@@ -28,11 +28,11 @@ public class LoanEntity {
     @Size(max = 64)
     private String term;
 
-    @Column(name = "ipAddress",nullable = false,updatable = false)
+    @Column(name = "ipAddress", nullable = false, updatable = false)
     @NotNull
     private String ipAddress;
 
-    @Column(name = "applicationDate",nullable = false,updatable = false)
+    @Column(name = "applicationDate", nullable = false, updatable = false)
     @NotNull
     private Date applicationDate;
 
@@ -42,7 +42,7 @@ public class LoanEntity {
     public LoanEntity(LoanEntityBuilder builder) {
         this.amount = builder.amount.toString();
         this.term = builder.term.toString();
-        this.ipAddress=builder.ipAddress;
+        this.ipAddress = builder.ipAddress;
     }
 
     public static class LoanEntityBuilder {
@@ -59,8 +59,9 @@ public class LoanEntity {
             this.term = term;
             return this;
         }
-        public LoanEntityBuilder withIpAddress(String ipAddress){
-            this.ipAddress=ipAddress;
+
+        public LoanEntityBuilder withIpAddress(String ipAddress) {
+            this.ipAddress = ipAddress;
             return this;
         }
 
@@ -68,8 +69,9 @@ public class LoanEntity {
             return new LoanEntity(this);
         }
     }
+
     @PrePersist
-    void createdAt(){
-        this.applicationDate=new Date();
+    void createdAt() {
+        this.applicationDate = new Date();
     }
 }

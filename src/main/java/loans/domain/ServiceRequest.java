@@ -2,9 +2,9 @@ package loans.domain;
 
 public class ServiceRequest {
 
-    private Integer amount;
-    private Integer term;
-    private String ipAddress;
+    private final Integer amount;
+    private final Integer term;
+    private final String ipAddress;
 
     public ServiceRequest(ServiceRequestBuilder builder) {
         this.ipAddress = builder.ipAddress;
@@ -27,8 +27,8 @@ public class ServiceRequest {
             return this;
         }
 
-        public ServiceRequestBuilder withIpAddress(String ipAddress){
-            this.ipAddress=ipAddress;
+        public ServiceRequestBuilder withIpAddress(String ipAddress) {
+            this.ipAddress = ipAddress;
             return this;
         }
 
@@ -44,7 +44,8 @@ public class ServiceRequest {
     public Integer getTerm() {
         return term;
     }
-    public String getIpAddress(){
+
+    public String getIpAddress() {
         return ipAddress;
     }
 }
