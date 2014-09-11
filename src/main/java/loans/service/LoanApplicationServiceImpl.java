@@ -24,23 +24,35 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
 
     @Override
     public ServiceResponse apply(ServiceRequest request) {
-        String message = validationService.validateApplyRequest(request);
-        LoanEntity loanEntity = new LoanEntityBuilder().withAmount(request.getAmount()).withTerm(request.getTerm()).build();
-        LoanEntity save = save(loanEntity);
+        ValidationStatus status = validationService.validateApplyRequest(request, repository.findByIpAddress(request.getIpAddress()));
+        String responseMessage = "NOT OKAY";
+        if (status.equals(ValidationStatus.OK)) {
+            LoanEntity loanEntity = new LoanEntityBuilder()
+                    .withAmount(request.getAmount())
+                    .withTerm(request.getTerm())
+                    .withIpAddress(request.getIpAddress())
+                    .build();
+            responseMessage = save(loanEntity);
+        }
         return new ServiceResponse.ServiceResponseBuilder()
+                .withMessage(responseMessage)
                 .build();
     }
 
     @Transactional
-    private LoanEntity save(LoanEntity loanEntity) {
-        return repository.save(loanEntity);
+    private String save(LoanEntity loanEntity) {
+        try {
+            repository.save(loanEntity);
+            return "Okay";
+        } catch (Exception e) {
+            return "Some Error occured during saving loan entity";
+        }
     }
 
     @Override
     public ServiceResponse extend(ServiceRequest request) {
-        String message = validationService.validateExtendRequest();
+        ValidationStatus status = validationService.validateExtendRequest();
         return new ServiceResponse.ServiceResponseBuilder()
-                .withMessage(message)
                 .build();
     }
 

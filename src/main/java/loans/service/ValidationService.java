@@ -1,14 +1,20 @@
 package loans.service;
 
 import loans.domain.ServiceRequest;
+import loans.repository.LoanEntity;
+
+import java.util.List;
 
 public class ValidationService {
 
-    public String validateApplyRequest(ServiceRequest request) {
-        return null;  //TODO
+    public ValidationStatus validateApplyRequest(ServiceRequest request, List<LoanEntity> existingEntriesForThisIp) {
+        Integer amount = request.getAmount();
+        Integer term = request.getTerm();
+
+        return ValidationStatus.OK;
     }
 
-    public String validateExtendRequest() {
+    public ValidationStatus validateExtendRequest() {
         return null;  //TODO
     }
 }

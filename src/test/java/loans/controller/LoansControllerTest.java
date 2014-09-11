@@ -1,6 +1,5 @@
-package loans.resources;
+package loans.controller;
 
-import loans.controller.LoansController;
 import loans.domain.ServiceRequest;
 import loans.domain.ServiceResponse;
 import loans.service.LoanApplicationService;
@@ -9,6 +8,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.mock.web.MockHttpServletRequest;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
@@ -24,18 +27,20 @@ public class LoansControllerTest {
     private LoansController loansController;
 
     @Before
-    public void setUp(){
-        loansController =new LoansController(loanApplicationService);
+    public void setUp() {
+        loansController = new LoansController(loanApplicationService);
     }
 
     @Test
-    public void shouldApplyLoan()throws Exception{
+    public void shouldApplyLoan() throws Exception {
         final ServiceResponse savedLoanServiceResponse = stubServiceToReturnStoredEntity();
-        ServiceResponse serviceResponse = loansController.apply("FakeAmount", "FakeTerm");
+        HttpServletRequest httpServletRequest = new MockHttpServletRequest();
+        ServiceResponse serviceResponse = loansController.apply(httpServletRequest,100, 30);
 
-        verify(loanApplicationService,times(1)).apply(any(ServiceRequest.class));
+        verify(loanApplicationService, times(1)).apply(any(ServiceRequest.class));
         assertEquals("Returned entity should come from the service", savedLoanServiceResponse, serviceResponse);
     }
+
     private ServiceResponse stubServiceToReturnStoredEntity() {
         final ServiceResponse response = new ServiceResponse.ServiceResponseBuilder().build();
         when(loanApplicationService.apply(any(ServiceRequest.class))).thenReturn(response);

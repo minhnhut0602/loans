@@ -1,6 +1,11 @@
 package loans.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface LoanRepository extends JpaRepository<LoanEntity, String> {
+import java.util.List;
+
+public interface LoanRepository extends CrudRepository<LoanEntity, String> {
+
+    List<LoanEntity> findByIpAddress(String ipAddress);
+
 }
