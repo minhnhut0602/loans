@@ -15,7 +15,7 @@ public enum ValidationStatus {
     private String value;
 
     ValidationStatus(String value) {
-        this.value=value;
+        this.value = value;
     }
 
     public String getValue() {

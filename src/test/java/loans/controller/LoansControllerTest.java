@@ -11,7 +11,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
@@ -35,7 +34,7 @@ public class LoansControllerTest {
     public void shouldApplyLoan() throws Exception {
         final ServiceResponse savedLoanServiceResponse = stubServiceToReturnStoredEntity();
         HttpServletRequest httpServletRequest = new MockHttpServletRequest();
-        ServiceResponse serviceResponse = loansController.apply(httpServletRequest,100.0, 30);
+        ServiceResponse serviceResponse = loansController.apply(httpServletRequest, 100.0, 30);
 
         verify(loanApplicationService, times(1)).apply(any(ServiceRequest.class));
         assertEquals("Returned entity should come from the service", savedLoanServiceResponse, serviceResponse);

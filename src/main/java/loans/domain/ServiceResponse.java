@@ -2,8 +2,6 @@ package loans.domain;
 
 import loans.repository.LoanEntity;
 
-import java.util.List;
-
 public class ServiceResponse {
 
     private final Iterable<LoanEntity> historyItems;

@@ -38,7 +38,7 @@ public class LoanEntity {
     private String status;
 
     @Column(name = "extended")
-    private  boolean extended;
+    private boolean extended;
 
     public LoanEntity() {
     }
@@ -48,7 +48,7 @@ public class LoanEntity {
         this.term = builder.term.toString();
         this.ipAddress = builder.ipAddress;
         this.status = builder.status;
-        this.extended=builder.extended;
+        this.extended = builder.extended;
 
     }
 
@@ -57,7 +57,7 @@ public class LoanEntity {
         private Integer term;
         private String ipAddress;
         private String status;
-        private  boolean extended;
+        private boolean extended;
 
         public LoanEntityBuilder withAmount(Double amount) {
             this.amount = amount;
@@ -78,6 +78,7 @@ public class LoanEntity {
             this.status = status;
             return this;
         }
+
         public LoanEntityBuilder withExtended(boolean extended) {
             this.extended = extended;
             return this;

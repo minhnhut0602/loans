@@ -15,12 +15,12 @@ import static loans.service.ValidationStatus.POSSIBLE_SPAM;
 
 public class ValidationService {
 
-    private static final Integer POSSIBLE_MAX_AMOUNT = 450;
+    private static final Double POSSIBLE_MAX_AMOUNT = 450.0;
     private static final Integer POSSIBLE_MAX_TERM = 30;
     public static final int MAX_APPLICATIONS_PER_DAY = 3;
 
     public ValidationStatus validateApplyRequest(ServiceRequest request, LoanRepository repository) {
-        if(repository.findByStatus("ACCEPTED")!=null){
+        if (repository.findByStatus("ACCEPTED") != null) {
             return ValidationStatus.ALREADY_IN_PROGRESS;
         }
         if (isPossibleSpam(repository.findByIpAddress(request.getIpAddress()))) {
@@ -44,28 +44,27 @@ public class ValidationService {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        Date todaysMidnight = cal.getTime();
-        Calendar cal1 = Calendar.getInstance();
-        cal1.set(Calendar.HOUR_OF_DAY, 8);
-        cal1.set(Calendar.MINUTE, 0);
-        cal1.set(Calendar.SECOND, 0);
-        cal1.set(Calendar.MILLISECOND, 0);
-        Date eightoclock = cal1.getTime();
+        Date minTime = cal.getTime();
+        cal.set(Calendar.HOUR_OF_DAY, 8);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date maxTime = cal.getTime();
 
         Date currentDate = new Date();
 
-        return POSSIBLE_MAX_AMOUNT.equals(request.getAmount()) && currentDate.after(todaysMidnight) && currentDate.before(eightoclock);
+        return POSSIBLE_MAX_AMOUNT.equals(request.getAmount()) && currentDate.after(minTime) && currentDate.before(maxTime);
     }
 
     private boolean isPossibleSpam(List<LoanEntity> existingEntriesForThisIp) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
-        int occurencies = 0;
+        int occurences = 0;
         for (LoanEntity loanEntity : existingEntriesForThisIp) {
             if (loanEntity.getApplicationDate().after(cal.getTime())) {
-                occurencies++;
+                occurences++;
             }
-            if (occurencies >= MAX_APPLICATIONS_PER_DAY) {
+            if (occurences >= MAX_APPLICATIONS_PER_DAY) {
                 return true;
             }
         }
