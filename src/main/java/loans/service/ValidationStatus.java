@@ -8,5 +8,6 @@ public enum ValidationStatus {
     OK,
     INVALID_AMOUNT,
     INVALID_TERM,
-    RISK_TOO_HIGH
+    POSSIBLE_FRAUD,
+    POSSIBLE_SPAM
 }

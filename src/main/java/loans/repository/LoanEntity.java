@@ -74,4 +74,16 @@ public class LoanEntity {
     void createdAt() {
         this.applicationDate = new Date();
     }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public String getTerm() {
+        return term;
+    }
+
+    public Date getApplicationDate() {
+        return applicationDate;
+    }
 }
