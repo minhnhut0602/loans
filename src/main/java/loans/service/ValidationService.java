@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static loans.repository.ApplicationStatus.ACCEPTED;
 import static loans.service.ValidationStatus.INVALID_AMOUNT;
 import static loans.service.ValidationStatus.INVALID_TERM;
 import static loans.service.ValidationStatus.POSSIBLE_FRAUD;
@@ -20,7 +21,7 @@ public class ValidationService {
     public static final int MAX_APPLICATIONS_PER_DAY = 3;
 
     public ValidationStatus validateApplyRequest(ServiceRequest request, LoanRepository repository) {
-        if (repository.findByStatus("ACCEPTED") != null) {
+        if (repository.findByStatus(ACCEPTED) != null) {
             return ValidationStatus.ALREADY_IN_PROGRESS;
         }
         if (isPossibleSpam(repository.findByIpAddress(request.getIpAddress()))) {

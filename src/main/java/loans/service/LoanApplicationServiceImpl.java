@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import static loans.repository.ApplicationStatus.ACCEPTED;
+import static loans.repository.ApplicationStatus.DECLINED;
+import static loans.repository.ApplicationStatus.EXTENSION;
 import static loans.repository.LoanEntity.LoanEntityBuilder;
 
 @Service
@@ -29,7 +32,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         if (status.equals(ValidationStatus.OK)) {
             LoanEntity loanEntity = new LoanEntityBuilder()
                     .withAmount(request.getAmount())
-                    .withStatus("ACCEPTED")
+                    .withStatus(ACCEPTED)
                     .withTerm(request.getTerm())
                     .withIpAddress(request.getIpAddress())
                     .build();
@@ -37,7 +40,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         } else {
             LoanEntity loanEntity = new LoanEntityBuilder()
                     .withAmount(request.getAmount())
-                    .withStatus("DECLINED")
+                    .withStatus(DECLINED)
                     .withTerm(request.getTerm())
                     .withIpAddress(request.getIpAddress())
                     .build();
@@ -61,7 +64,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
 
     @Override
     public ServiceResponse extend(ServiceRequest request) {
-        LoanEntity loanEntity = repository.findByStatus("ACCEPTED");
+        LoanEntity loanEntity = repository.findByStatus(ACCEPTED);
         String resultMessage;
         if (loanEntity.isExtended()) {
             resultMessage = "ALREADY EXTENDED";
@@ -72,7 +75,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
             LoanEntity extension = new LoanEntityBuilder()
                     .withAmount(Double.valueOf(loanEntity.getAmount()) * 1.5)
                     .withTerm(Integer.valueOf(loanEntity.getTerm() + 7))
-                    .withStatus("EXTENSION")
+                    .withStatus(EXTENSION)
                     .withIpAddress(request.getIpAddress())
                     .build();
             resultMessage = save(extension);
