@@ -1,8 +1,4 @@
-package loans.service;/*
- * @(#)ValidationStatus.java
- *
- * Copyright C.T.Co Ltd, 15/25 Jurkalnes Street, Riga LV-1046, Latvia. All rights reserved.
- */
+package loans.service;
 
 public enum ValidationStatus {
     OK("Okay"),

@@ -2,11 +2,11 @@ package loans.controller;
 
 import loans.domain.ServiceResponse;
 import loans.service.LoanApplicationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import static loans.domain.ServiceRequest.ServiceRequestBuilder;
@@ -16,7 +16,7 @@ public class LoansController {
 
     private final LoanApplicationService loanApplicationService;
 
-    @Inject
+    @Autowired
     public LoansController(final LoanApplicationService loanApplicationService) {
         this.loanApplicationService = loanApplicationService;
     }

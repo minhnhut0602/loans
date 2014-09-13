@@ -4,6 +4,7 @@ import loans.domain.ServiceRequest;
 import loans.domain.ServiceResponse;
 import loans.repository.LoanEntity;
 import loans.repository.LoanRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -20,7 +21,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     private final LoanRepository repository;
     private final ValidationService validationService = new ValidationService();
 
-    @Inject
+    @Autowired
     public LoanApplicationServiceImpl(final LoanRepository repository) {
         this.repository = repository;
     }
