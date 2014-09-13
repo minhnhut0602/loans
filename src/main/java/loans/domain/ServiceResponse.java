@@ -5,24 +5,24 @@ import loans.repository.LoanEntity;
 public class ServiceResponse {
 
     private final Iterable<LoanEntity> historyItems;
-    private final String message;
+    private final String statusMessage;
 
     public ServiceResponse(ServiceResponseBuilder builder) {
         this.historyItems = builder.historyItems;
-        this.message = builder.message;
+        this.statusMessage = builder.statusMessage;
     }
 
     public static class ServiceResponseBuilder {
         private Iterable<LoanEntity> historyItems;
-        private String message;
+        private String statusMessage;
 
         public ServiceResponseBuilder withHistoryItems(Iterable<LoanEntity> historyItems) {
             this.historyItems = historyItems;
             return this;
         }
 
-        public ServiceResponseBuilder withMessage(String message) {
-            this.message = message;
+        public ServiceResponseBuilder withMessage(String statusMessage) {
+            this.statusMessage = statusMessage;
             return this;
         }
 
@@ -35,7 +35,7 @@ public class ServiceResponse {
         return historyItems;
     }
 
-    public String getMessage() {
-        return message;
+    public String getStatusMessage() {
+        return statusMessage;
     }
 }

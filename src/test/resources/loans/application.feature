@@ -1,6 +1,11 @@
 Feature: Application
 
-  Scenario: I apply for a loan
-    Given My ip address is "192.168.0.0"
-    When I apply from with amount 30 and with term 30
-    Then I expect to receive a response "Okay"
+  Scenario: Valid application
+    Given application is performed from ip "192.168.0.0"
+    When user applies for a loan with amount 30 and with term 30
+    Then response status message is "Okay"
+
+  Scenario: Maximum applications reached
+    Given application is performed from ip "192.168.0.1"
+    When user applies 3 times for a loan with amount 30 and with term 30
+    Then status message from the next response is "Possible Spam"

@@ -3,6 +3,7 @@ package loans.service;
 import loans.domain.ServiceRequest;
 import loans.repository.LoanEntity;
 import loans.repository.LoanRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -14,6 +15,7 @@ import static loans.service.ValidationStatus.INVALID_TERM;
 import static loans.service.ValidationStatus.POSSIBLE_FRAUD;
 import static loans.service.ValidationStatus.POSSIBLE_SPAM;
 
+@Service
 public class ValidationService {
 
     private static final Double POSSIBLE_MAX_AMOUNT = 450.0;
@@ -21,11 +23,11 @@ public class ValidationService {
     public static final int MAX_APPLICATIONS_PER_DAY = 3;
 
     public ValidationStatus validateApplyRequest(ServiceRequest request, LoanRepository repository) {
-        if (repository.findByStatus(ACCEPTED) != null) {
-            return ValidationStatus.ALREADY_IN_PROGRESS;
-        }
         if (isPossibleSpam(repository.findByIpAddress(request.getIpAddress()))) {
             return POSSIBLE_SPAM;
+        }
+        if (repository.findByStatus(ACCEPTED) != null) {
+            return ValidationStatus.ALREADY_IN_PROGRESS;
         }
         if (isPossibleFraud(request)) {
             return POSSIBLE_FRAUD;
