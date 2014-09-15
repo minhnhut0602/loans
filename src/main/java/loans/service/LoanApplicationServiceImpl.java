@@ -68,7 +68,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         LoanEntity loanEntity = repository.findByStatus(ACCEPTED);
         String resultMessage;
         if (loanEntity.isExtended()) {
-            resultMessage = "ALREADY EXTENDED";
+            resultMessage = "The loan is already extended";
         } else {
             loanEntity.setExtended(true);
             save(loanEntity);
@@ -91,7 +91,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         Iterable<LoanEntity> loanEntities = repository.findAll();
         return new ServiceResponse.ServiceResponseBuilder()
                 .withHistoryItems(loanEntities)
-                .withMessage("Performed getHistory")
+                .withMessage("Loan history")
                 .build();
     }
 }

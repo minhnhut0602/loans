@@ -8,4 +8,4 @@ Feature: Application
   Scenario: Maximum applications reached
     Given application is performed from ip "192.168.0.1"
     When user applies 3 times for a loan with amount 30 and with term 30
-    Then status message from the next response is "Possible Spam"
+    Then response status message is "Possible Spam"

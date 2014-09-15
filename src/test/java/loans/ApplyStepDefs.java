@@ -1,5 +1,6 @@
 package loans;
 
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -19,7 +20,6 @@ public class ApplyStepDefs {
     private ServiceResponse response;
     private MockHttpServletRequest request = new MockHttpServletRequest();
 
-    //Scenario: Valid application
     @Given("^application is performed from ip \\\"([^\\\"]*)\\\"$")
     public void application_is_performed_from_ip(String ipAddress) {
         request.setLocalAddr(ipAddress);
@@ -42,8 +42,13 @@ public class ApplyStepDefs {
         }
     }
 
-    @Then("^status message from the next response is \\\"([^\\\"]*)\\\"$")
-    public void status_message_from_the_next_response_is(String result){
-        assertEquals(result, response.getStatusMessage());
+    @And("^user tries to perform an extension$")
+    public void user_tries_to_perform_an_extension(){
+        response=controller.extend(request);
+    }
+
+    @When("^user requests for history$")
+    public void user_requests_for_history() throws Throwable{
+        response=controller.getHistory();
     }
 }
