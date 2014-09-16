@@ -80,10 +80,10 @@ public class ValidationService {
         if (isPossibleSpam(repository.findByIpAddress(request.getIpAddress()))) {
             return POSSIBLE_SPAM;
         }
-        if(repository.findByStatus(ACCEPTED)==null){
+        if (repository.findByStatus(ACCEPTED) == null) {
             return StatusMessage.NOTHING_TO_EXTEND;
         }
-        if(repository.findByStatus(ACCEPTED).isExtended()){
+        if (repository.findByStatus(ACCEPTED).isExtended()) {
             return ALREADY_EXTENDED;
         }
         return OK;

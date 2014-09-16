@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 
 import static loans.repository.LoanEntity.LoanEntityBuilder;
 import static loans.repository.RepositoryStatus.ACCEPTED;
@@ -55,7 +56,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     @Override
     public ServiceResponse extend(ServiceRequest request) {
         StatusMessage status = validationService.validateExtendRequest(request, repository);
-        if(status.equals(OK)){
+        if (status.equals(OK)) {
             LoanEntity loanEntity = repository.findByStatus(ACCEPTED);
             loanEntity.setExtended(true);
             save(loanEntity);
@@ -75,14 +76,18 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     @Override
     public ServiceResponse getHistory() {
         Iterable<LoanEntity> loanEntities = repository.findAll();
+        StatusMessage status = OK;
+        if (((ArrayList) loanEntities).isEmpty()) {
+            status = StatusMessage.HISTORY_EMPTY;
+        }
         return new ServiceResponse.ServiceResponseBuilder()
                 .withHistoryItems(loanEntities)
-                .withMessage(OK.getValue())
+                .withMessage(status.getValue())
                 .build();
     }
 
     @Transactional
-    private StatusMessage save(LoanEntity loanEntity) {
+    protected StatusMessage save(LoanEntity loanEntity) {
         try {
             repository.save(loanEntity);
             return OK;

@@ -9,7 +9,8 @@ public enum StatusMessage {
     ALREADY_IN_PROGRESS("Loan Already Accepted"),
     SAVING_ERROR("Error while saving entity"),
     ALREADY_EXTENDED("The loan is already extended"),
-    NOTHING_TO_EXTEND("No actual loans to extend");
+    NOTHING_TO_EXTEND("No actual loans to extend"),
+    HISTORY_EMPTY("No entries in history to show");
 
     private String value;
 
