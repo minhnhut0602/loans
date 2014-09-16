@@ -3,6 +3,7 @@ package loans.controller;
 import loans.domain.ServiceResponse;
 import loans.service.LoanApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,7 @@ public class LoansController {
     }
 
     @RequestMapping("/apply")
+    @ExceptionHandler(NumberFormatException.class)
     public ServiceResponse apply(HttpServletRequest request,
                                  @RequestParam(value = "amount", required = true) Double amount,
                                  @RequestParam(value = "term", required = true) Integer term) {

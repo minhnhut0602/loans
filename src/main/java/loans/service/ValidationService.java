@@ -3,6 +3,7 @@ package loans.service;
 import loans.domain.ServiceRequest;
 import loans.repository.LoanEntity;
 import loans.repository.LoanRepository;
+import loans.utils.DateUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -56,7 +57,7 @@ public class ValidationService {
         cal.set(Calendar.MILLISECOND, 0);
         Date maxTime = cal.getTime();
 
-        Date currentDate = new Date();
+        Date currentDate = DateUtils.getCalendarInstance().getTime();
 
         return POSSIBLE_MAX_AMOUNT.equals(request.getAmount()) && currentDate.after(minTime) && currentDate.before(maxTime);
     }

@@ -49,6 +49,7 @@ public class LoanEntity {
         this.ipAddress = builder.ipAddress;
         this.status = builder.status;
         this.extended = builder.extended;
+        this.applicationDate=builder.applicationDate;
 
     }
 
@@ -58,6 +59,7 @@ public class LoanEntity {
         private String ipAddress;
         private RepositoryStatus status;
         private boolean extended;
+        private Date applicationDate;
 
         public LoanEntityBuilder withAmount(Double amount) {
             this.amount = amount;
@@ -84,6 +86,12 @@ public class LoanEntity {
             return this;
         }
 
+
+        public LoanEntityBuilder withApplicationDate(Date applicationDate) {
+            this.applicationDate = applicationDate;
+            return this;
+
+        }
 
         public LoanEntity build() {
             return new LoanEntity(this);
