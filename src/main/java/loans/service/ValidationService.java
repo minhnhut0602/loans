@@ -9,11 +9,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static loans.repository.ApplicationStatus.ACCEPTED;
-import static loans.service.ValidationStatus.INVALID_AMOUNT;
-import static loans.service.ValidationStatus.INVALID_TERM;
-import static loans.service.ValidationStatus.POSSIBLE_FRAUD;
-import static loans.service.ValidationStatus.POSSIBLE_SPAM;
+import static loans.repository.RepositoryStatus.ACCEPTED;
+import static loans.service.StatusMessage.INVALID_AMOUNT;
+import static loans.service.StatusMessage.INVALID_TERM;
+import static loans.service.StatusMessage.POSSIBLE_FRAUD;
+import static loans.service.StatusMessage.POSSIBLE_SPAM;
 
 @Service
 public class ValidationService {
@@ -22,12 +22,12 @@ public class ValidationService {
     private static final Integer POSSIBLE_MAX_TERM = 30;
     public static final int MAX_APPLICATIONS_PER_DAY = 3;
 
-    public ValidationStatus validateApplyRequest(ServiceRequest request, LoanRepository repository) {
+    public StatusMessage validateApplyRequest(ServiceRequest request, LoanRepository repository) {
         if (isPossibleSpam(repository.findByIpAddress(request.getIpAddress()))) {
             return POSSIBLE_SPAM;
         }
         if (repository.findByStatus(ACCEPTED) != null) {
-            return ValidationStatus.ALREADY_IN_PROGRESS;
+            return StatusMessage.ALREADY_IN_PROGRESS;
         }
         if (isPossibleFraud(request)) {
             return POSSIBLE_FRAUD;
@@ -38,7 +38,7 @@ public class ValidationService {
         if (POSSIBLE_MAX_TERM < request.getTerm() || request.getTerm() <= 0) {
             return INVALID_TERM;
         }
-        return ValidationStatus.OK;
+        return StatusMessage.OK;
     }
 
     private boolean isPossibleFraud(ServiceRequest request) {

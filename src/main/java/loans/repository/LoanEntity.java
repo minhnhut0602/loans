@@ -35,7 +35,7 @@ public class LoanEntity {
 
     @Column(name = "status", nullable = false, updatable = true)
     @NotNull
-    private ApplicationStatus status;
+    private RepositoryStatus status;
 
     @Column(name = "extended")
     private boolean extended;
@@ -56,7 +56,7 @@ public class LoanEntity {
         private Double amount;
         private Integer term;
         private String ipAddress;
-        private ApplicationStatus status;
+        private RepositoryStatus status;
         private boolean extended;
 
         public LoanEntityBuilder withAmount(Double amount) {
@@ -74,7 +74,7 @@ public class LoanEntity {
             return this;
         }
 
-        public LoanEntityBuilder withStatus(ApplicationStatus status) {
+        public LoanEntityBuilder withStatus(RepositoryStatus status) {
             this.status = status;
             return this;
         }
@@ -107,7 +107,7 @@ public class LoanEntity {
         return applicationDate;
     }
 
-    public ApplicationStatus getStatus() {
+    public RepositoryStatus getStatus() {
         return status;
     }
 
@@ -123,7 +123,7 @@ public class LoanEntity {
         this.ipAddress = ipAddress;
     }
 
-    public void setStatus(ApplicationStatus status) {
+    public void setStatus(RepositoryStatus status) {
         this.status = status;
     }
 

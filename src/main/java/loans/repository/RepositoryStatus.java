@@ -1,13 +1,13 @@
 package loans.repository;
 
-public enum ApplicationStatus {
+public enum RepositoryStatus {
     ACCEPTED("ACCEPTED"),
     DECLINED("DECLINED"),
     EXTENSION("EXTENSION");
 
     private String value;
 
-    ApplicationStatus(String value) {
+    RepositoryStatus(String value) {
         this.value = value;
     }
 

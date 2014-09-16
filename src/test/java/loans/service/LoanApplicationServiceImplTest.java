@@ -2,7 +2,6 @@ package loans.service;
 
 import loans.domain.ServiceRequest;
 import loans.domain.ServiceResponse;
-import loans.repository.LoanEntity;
 import loans.repository.LoanRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,10 +9,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static junit.framework.Assert.assertNotNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Matchers.isNotNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -21,28 +24,36 @@ public class LoanApplicationServiceImplTest {
 
     @Mock
     private LoanRepository loanRepository;
+    @Mock
+    private ValidationService validationService;
 
     private LoanApplicationService loanApplicationService;
-    private ValidationService validationService;
 
     @Before
     public void setUp() {
-        loanApplicationService = new LoanApplicationServiceImpl(loanRepository);
+        loanApplicationService = new LoanApplicationServiceImpl(loanRepository,validationService);
     }
 
     @Test
-    public void shouldSaveNewEntry() {
-        final ServiceResponse responseStub = stubResponseOnSave();
-        final ServiceRequest request = new ServiceRequest.ServiceRequestBuilder().withAmount(100.0).withTerm(30).build();
-        final ServiceResponse response = loanApplicationService.apply(request);
-        verify(loanRepository, times(1)).save(any(LoanEntity.class));
-
-        assertNotNull(response);
+    public void applicationSuccessfull() {
+        when(validationService.validateApplyRequest(any(ServiceRequest.class), any(LoanRepository.class))).thenReturn(StatusMessage.OK);
+        ServiceResponse serviceResponse = loanApplicationService.apply(generateValidServiceRequest());
+        assertThat(serviceResponse.getStatusMessage(), is(StatusMessage.OK.getValue()));
     }
 
-    private ServiceResponse stubResponseOnSave() {
-        ServiceResponse response = new ServiceResponse.ServiceResponseBuilder().build();
-        when(loanRepository.save(any(LoanEntity.class))).thenReturn(new LoanEntity.LoanEntityBuilder().withAmount(100.0).withTerm(30).build());
-        return response;
+    @Test
+    public void applicationDeclined() {
+        when(validationService.validateApplyRequest(any(ServiceRequest.class), any(LoanRepository.class))).thenReturn(StatusMessage.INVALID_AMOUNT);
+        ServiceResponse serviceResponse=loanApplicationService.apply(generateValidServiceRequest());
+        assertThat(serviceResponse.getStatusMessage(), not(StatusMessage.OK.getValue()));
+    }
+
+
+    private ServiceRequest generateValidServiceRequest() {
+        return new ServiceRequest.ServiceRequestBuilder()
+                .withIpAddress("192.168.1.1")
+                .withAmount(30.0)
+                .withTerm(30)
+                .build();
     }
 }
