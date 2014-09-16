@@ -1,7 +1,7 @@
 loans
 =====
 
-A small test application with spring boot and cucucumber
+A small test application with spring boot and cucumber
 
 Rest methods can be accessed locally. 
 For example: 
