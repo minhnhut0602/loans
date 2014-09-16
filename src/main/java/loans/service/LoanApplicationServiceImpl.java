@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import static loans.repository.LoanEntity.LoanEntityBuilder;
 import static loans.repository.RepositoryStatus.ACCEPTED;
 import static loans.repository.RepositoryStatus.DECLINED;
 import static loans.repository.RepositoryStatus.EXTENSION;
-import static loans.repository.LoanEntity.LoanEntityBuilder;
 import static loans.service.StatusMessage.OK;
 
 @Service
@@ -22,9 +22,9 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     private final ValidationService validationService;
 
     @Autowired
-    public LoanApplicationServiceImpl(final LoanRepository repository,final ValidationService validationService) {
+    public LoanApplicationServiceImpl(final LoanRepository repository, final ValidationService validationService) {
         this.repository = repository;
-        this.validationService=validationService;
+        this.validationService = validationService;
     }
 
     @Override
@@ -52,26 +52,13 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
                 .build();
     }
 
-    @Transactional
-    private StatusMessage save(LoanEntity loanEntity) {
-        try {
-            repository.save(loanEntity);
-            return OK;
-        } catch (Exception e) {
-            return StatusMessage.SAVING_ERROR;
-        }
-    }
-
     @Override
     public ServiceResponse extend(ServiceRequest request) {
-        LoanEntity loanEntity = repository.findByStatus(ACCEPTED);
-        StatusMessage status;
-        if (loanEntity.isExtended()) {
-            status = StatusMessage.ALREADY_EXTENDED;
-        } else {
+        StatusMessage status = validationService.validateExtendRequest(request, repository);
+        if(status.equals(OK)){
+            LoanEntity loanEntity = repository.findByStatus(ACCEPTED);
             loanEntity.setExtended(true);
             save(loanEntity);
-
             LoanEntity extension = new LoanEntityBuilder()
                     .withAmount(Double.valueOf(loanEntity.getAmount()) * 1.5)
                     .withTerm(Integer.valueOf(loanEntity.getTerm() + 7))
@@ -92,5 +79,15 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
                 .withHistoryItems(loanEntities)
                 .withMessage(OK.getValue())
                 .build();
+    }
+
+    @Transactional
+    private StatusMessage save(LoanEntity loanEntity) {
+        try {
+            repository.save(loanEntity);
+            return OK;
+        } catch (Exception e) {
+            return StatusMessage.SAVING_ERROR;
+        }
     }
 }

@@ -8,7 +8,8 @@ public enum StatusMessage {
     POSSIBLE_SPAM("Possible Spam"),
     ALREADY_IN_PROGRESS("Loan Already Accepted"),
     SAVING_ERROR("Error while saving entity"),
-    ALREADY_EXTENDED("The loan is already extended");
+    ALREADY_EXTENDED("The loan is already extended"),
+    NOTHING_TO_EXTEND("No actual loans to extend");
 
     private String value;
 

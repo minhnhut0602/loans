@@ -22,7 +22,7 @@ public class ApplyStepDefs {
 
     @Given("^application is performed from ip \\\"([^\\\"]*)\\\"$")
     public void application_is_performed_from_ip(String ipAddress) {
-        request.setLocalAddr(ipAddress);
+        request.setRemoteAddr(ipAddress);
     }
 
     @When("^user applies for a loan with amount (\\d+) and with term (\\d+)$")

@@ -2,7 +2,9 @@ package loans.service;
 
 import loans.domain.ServiceRequest;
 import loans.domain.ServiceResponse;
+import loans.repository.LoanEntity;
 import loans.repository.LoanRepository;
+import loans.repository.RepositoryStatus;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +37,7 @@ public class LoanApplicationServiceImplTest {
     }
 
     @Test
-    public void applicationSuccessfull() {
+    public void applicationSuccessful() {
         when(validationService.validateApplyRequest(any(ServiceRequest.class), any(LoanRepository.class))).thenReturn(StatusMessage.OK);
         ServiceResponse serviceResponse = loanApplicationService.apply(generateValidServiceRequest());
         assertThat(serviceResponse.getStatusMessage(), is(StatusMessage.OK.getValue()));
@@ -48,10 +50,32 @@ public class LoanApplicationServiceImplTest {
         assertThat(serviceResponse.getStatusMessage(), not(StatusMessage.OK.getValue()));
     }
 
+    @Test
+    public void extensionSuccessful(){
+        when(validationService.validateExtendRequest(any(ServiceRequest.class), any(LoanRepository.class))).thenReturn(StatusMessage.OK);
+        when(loanRepository.findByStatus(any(RepositoryStatus.class))).thenReturn(generateLoanEntity(false,RepositoryStatus.ACCEPTED));
+        ServiceResponse serviceResponse = loanApplicationService.extend(generateValidServiceRequest());
+        assertThat(serviceResponse.getStatusMessage(), is(StatusMessage.OK.getValue()));
+    }
+    @Test
+    public void extensionDeclined(){
+        when(validationService.validateExtendRequest(any(ServiceRequest.class), any(LoanRepository.class))).thenReturn(StatusMessage.POSSIBLE_SPAM);
+        ServiceResponse serviceResponse = loanApplicationService.extend(generateValidServiceRequest());
+        assertThat(serviceResponse.getStatusMessage(), not(StatusMessage.OK.getValue()));
+    }
+
+    private LoanEntity generateLoanEntity(boolean extended, RepositoryStatus repositoryStatus) {
+        return   new LoanEntity.LoanEntityBuilder()
+                .withIpAddress("192.168.1.1")
+                .withAmount(30.0)
+                .withTerm(30)
+                .withExtended(extended)
+                .withStatus(repositoryStatus).build();
+    }
 
     private ServiceRequest generateValidServiceRequest() {
         return new ServiceRequest.ServiceRequestBuilder()
-                .withIpAddress("192.168.1.1")
+                .withIpAddress("192.168.1.2")
                 .withAmount(30.0)
                 .withTerm(30)
                 .build();

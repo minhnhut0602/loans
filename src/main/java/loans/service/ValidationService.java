@@ -10,8 +10,10 @@ import java.util.Date;
 import java.util.List;
 
 import static loans.repository.RepositoryStatus.ACCEPTED;
+import static loans.service.StatusMessage.ALREADY_EXTENDED;
 import static loans.service.StatusMessage.INVALID_AMOUNT;
 import static loans.service.StatusMessage.INVALID_TERM;
+import static loans.service.StatusMessage.OK;
 import static loans.service.StatusMessage.POSSIBLE_FRAUD;
 import static loans.service.StatusMessage.POSSIBLE_SPAM;
 
@@ -72,5 +74,18 @@ public class ValidationService {
             }
         }
         return false;
+    }
+
+    public StatusMessage validateExtendRequest(ServiceRequest request, LoanRepository repository) {
+        if (isPossibleSpam(repository.findByIpAddress(request.getIpAddress()))) {
+            return POSSIBLE_SPAM;
+        }
+        if(repository.findByStatus(ACCEPTED)==null){
+            return StatusMessage.NOTHING_TO_EXTEND;
+        }
+        if(repository.findByStatus(ACCEPTED).isExtended()){
+            return ALREADY_EXTENDED;
+        }
+        return OK;
     }
 }
